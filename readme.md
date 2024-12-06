@@ -64,48 +64,52 @@ sudo nano /etc/ssh/sshd_config
 2. Find the line:
 ```console
 #PasswordAuthentication yes
-
-<span style="color:blue;>Replace it with:</span>
-
+```
+3. Replace it with:
+```console
 PasswordAuthentication no
 ```
-3. Save and close the editor (Ctrl+O, then Ctrl+X).
-
-4. Restart the SSH service:
-
-`sudo systemctl restart ssh.service`
-
-5. Verify password login is disabled:
-
-`ssh -o PubkeyAuthentication=no username@Server-IP`
-
-The result should be:
-
-Permission denied (publickey).
-
+4. Save and close the editor (Ctrl+O, then Ctrl+X).
+5. Restart the SSH service:
+```bash
+sudo systemctl restart ssh.service
+```
+6. Verify password login is disabled:
+```bash
+ssh -o PubkeyAuthentication=no username@Server-IP
+```
+The result should be: `Permission denied (publickey).`
 ## 6. Install Nginx Web Server
 
-1. Update package lists `sudo apt update`
-2. Install Nginx `sudo apt install nginx -y`
-3. Verify Nginx is running `systemctl status nginx.service`
-4. Open your server’s IP in a browser to check if the default Nginx page loads.
+1. Update package lists 
+```bash
+sudo apt update
+```
+2. Install Nginx 
+```bash
+sudo apt install nginx -y
+```
+3. Verify Nginx is running 
+```bash
+systemctl status nginx.service
+```
+4. Open your Server’s IP in a Browser to check if the default Nginx page loads.
 
 ## 7. **Configure an Alternative Nginx Site**
 
 1. Create a new directory for the site:
-
-`sudo mkdir /var/www/alternatives`
-
+```bash
+sudo mkdir /var/www/alternatives
+```
 2. Create an HTML file for the site:
-
-`sudo touch /var/www/alternatives/alternate-index.html`
-
+```bash
+sudo touch /var/www/alternatives/alternate-index.html
+```
 3. Configure the site:
-
-`sudo nano /etc/nginx/sites-enabled/alternatives`
-
-Example configuration:
-
+```bash
+sudo nano /etc/nginx/sites-enabled/alternatives
+```
+### Example configuration:
 ```nginx
 server {
     listen 8081;
@@ -117,55 +121,53 @@ server {
     }
 }
 ```
-
 4. Save and close the file (Ctrl+O, then Ctrl+X).
 
 5. Edit the HTML file:
-
-`sudo nano /var/www/alternatives/alternate-index.html`
-
+```bash
+sudo nano /var/www/alternatives/alternate-index.html
+```
 Customize the page as desired.
-
 6. Restart Nginx:
-
-`sudo service nginx restart`
-
+```bash
+sudo service nginx restart
+```
 7. Verify the new site:
-
 Open your server’s IP in the browser, appending :8081 to test the new configuration.
 
 ## 8. **Create an SSH Alias**
 
 1. Add an alias for easier login:
-
-`alias vserver_connect="ssh -o StrictHostKeyChecking=False -i ~/.ssh/id_ed25519 username@Server-IP"`
-
+```bash
+alias vserver_connect="ssh -o StrictHostKeyChecking=False -i ~/.ssh/id_ed25519 username@Server-IP"
+```
 2. Use the alias to log in:
-
-`vserver_connect`
-
+```bash
+vserver_connect
+```
 ## 9. **Install and Configure Git**
 
 1. Install Git:
-
-`sudo apt update`
-`sudo apt install git -y`
-
+```bash
+sudo apt update
+sudo apt install git -y
+```
 2. Configure Git:
-
-`git config --global user.name "Your Name"`
-`git config --global user.email "your.email@example.com"`
-
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
 3. Verify Git installation:
-
-`git --version`
-
+```bash
+git --version
+```
 4. Test Git functionality by cloning a repository:
-
-`git clone https://github.com/example/repository.git`
-
+```bash
+git clone https://github.com/example/repository.git
+```
 5. Navigate into the cloned directory:
-
-`cd repository`
+```bash
+cd repository
+```
 
 ### You have successfully set up your V-Server and configured it for secure access and web hosting!
