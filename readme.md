@@ -1,5 +1,7 @@
 # V-Server Setup Guide
 
+Server IP: `23.88.106.133`
+
 This guide will help you set up your V-Server from scratch, covering SSH configuration, password login disablement, and setting up an Nginx web server. Follow the steps below to configure your server.
 
 ---
