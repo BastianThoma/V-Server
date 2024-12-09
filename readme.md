@@ -1,11 +1,10 @@
 # V-Server Setup Guide
 
-
 This guide will help you set up your V-Server from scratch, covering SSH configuration, password login disablement, and setting up an Nginx web server. Follow the steps below to configure your server.
 
 ---
 
-# Table of Contents
+## Table of Contents
 
 - [1. Generate SSH Key Pair](#1-generate-ssh-key-pair)
 - [2. First Login to the Server](#2-first-login-to-the-server)
@@ -21,100 +20,134 @@ This guide will help you set up your V-Server from scratch, covering SSH configu
 
 ## 1. **Generate SSH Key Pair**
 
-__1. Create an `ed25519` SSH key pair using the command:__
+**1. Create an `ed25519` SSH key pair using the command:**
+
 ```bash
 ssh-keygen -t ed25519
 ```
-__2. Save the keys in the .ssh directory (default location).__
 
-__3. Verify the keys are saved with the command:__
+**2. Save the keys in the .ssh directory (default location).**
+
+**3. Verify the keys are saved with the command:**
+
 ```bash
 ls ~/.ssh
 ```
+
 ## 2. **First Login to the Server**
 
-__1. Connect to the server using username and Server-IP with the command:__ 
+**1. Connect to the server using username and Server-IP with the command:**
+
 ```bash
 ssh username@Server-IP
 ```
-__2. When prompted, confirm the connection by typing yes.__
 
-__3. Enter your password to log in for the first time.__
+**2. When prompted, confirm the connection by typing yes.**
 
-__4. Once logged in, server information should appear.__
+**3. Enter your password to log in for the first time.**
+
+**4. Once logged in, server information should appear.**
 
 ## 3. **Copy SSH Public Key to Server**
 
-__1. Use Git Bash (or any terminal) on Windows to copy the SSH key:__ 
+**1. Use Git Bash (or any terminal) on Windows to copy the SSH key:**
+
 ```bash
 ssh-copy-id username@Server-IP
 ```
-__2. Enter your password when prompted. This will add your public key to the server.__
+
+**2. Enter your password when prompted. This will add your public key to the server.**
 
 ## 4. **Test SSH Key Authentication**
 
-__1. Test logging in with your SSH key:__
+**1. Test logging in with your SSH key:**
+
 ```bash
 ssh -i ~/.ssh/id_ed25519 username@Server-IP
 ```
-__2. You should be able to log in without entering a password.__
+
+**2. You should be able to log in without entering a password.**
 
 ## 5. **Disable Password Login**
 
-__1. Edit the SSH configuration:__
+**1. Edit the SSH configuration:**
+
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
-__2. Find the line:__
+
+**2. Find the line:**
+
 ```console
 #PasswordAuthentication yes
 ```
-__3. Replace it with:__
+
+**3. Replace it with:**
+
 ```console
 PasswordAuthentication no
 ```
-__4. Save and close the editor (Ctrl+O, then Ctrl+X).__
 
-__5. Restart the SSH service:__
+**4. Save and close the editor (Ctrl+O, then Ctrl+X).**
+
+**5. Restart the SSH service:**
+
 ```bash
 sudo systemctl restart ssh.service
 ```
-__6. Verify password login is disabled:__
+
+**6. Verify password login is disabled:**
+
 ```bash
 ssh -o PubkeyAuthentication=no username@Server-IP
 ```
-__The result should be:__ `Permission denied (publickey).`
+
+**The result should be:** `Permission denied (publickey).`
+
 ## 6. Install Nginx Web Server
 
-__1. Update package lists__ 
+**1. Update package lists.**
+
 ```bash
 sudo apt update
 ```
-__2. Install Nginx__ 
+
+**2. Install Nginx.**
+
 ```bash
 sudo apt install nginx -y
 ```
-__3. Verify Nginx is running__ 
+
+**3. Verify Nginx is running.**
+
 ```bash
 systemctl status nginx.service
 ```
-__4. Open your Server’s IP in a Browser to check if the default Nginx page loads.__
+
+**4. Open your Server’s IP in a Browser to check if the default Nginx page loads.**
 
 ## 7. **Configure an Alternative Nginx Site**
 
-__1. Create a new directory for the site:__
+**1. Create a new directory for the site:**
+
 ```bash
 sudo mkdir /var/www/alternatives
 ```
-__2. Create an HTML file for the site:__
+
+**2. Create an HTML file for the site:**
+
 ```bash
 sudo touch /var/www/alternatives/alternate-index.html
 ```
-__3. Configure the site:__
+
+**3. Configure the site:**
+
 ```bash
 sudo nano /etc/nginx/sites-enabled/alternatives
 ```
-### Example configuration:
+
+### Example configuration
+
 ```nginx
 server {
     listen 8081;
@@ -126,54 +159,72 @@ server {
     }
 }
 ```
-__4. Save and close the file (Ctrl+O, then Ctrl+X).__
 
-__5. Edit the HTML file:__
+**4. Save and close the file (Ctrl+O, then Ctrl+X).**
+
+**5. Edit the HTML file:**
+
 ```bash
 sudo nano /var/www/alternatives/alternate-index.html
 ```
-__Customize the page as desired.__
 
-__6. Restart Nginx:__
+**Customize the page as desired.**
+
+**6. Restart Nginx:**
+
 ```bash
 sudo service nginx restart
 ```
-__7. Verify the new site:__
-__Open your server’s IP in the browser, appending :8081 to test the new configuration.__
+
+**7. Verify the new site:**
+**Open your server’s IP in the browser, appending :8081 to test the new configuration.**
 
 ## 8. **Create an SSH Alias**
 
-__1. Add an alias for easier login:__
+**1. Add an alias for easier login:**
+
 ```bash
 alias vserver_connect="ssh -o StrictHostKeyChecking=False -i ~/.ssh/id_ed25519 username@Server-IP"
 ```
-__2. Use the alias to log in:__
+
+**2. Use the alias to log in:**
+
 ```bash
 vserver_connect
 ```
+
 ## 9. **Install and Configure Git**
 
-__1. Install Git:__
+**1. Install Git:**
+
 ```bash
 sudo apt update
 sudo apt install git -y
 ```
-__2. Configure Git:__
+
+**2. Configure Git:**
+
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
-__3. Verify Git installation:__
+
+**3. Verify Git installation:**
+
 ```bash
 git --version
 ```
-__4. Test Git functionality by cloning a repository:__
+
+**4. Test Git functionality by cloning a repository:**
+
 ```bash
 git clone https://github.com/example/repository.git
 ```
-__5. Navigate into the cloned directory:__
+
+**5. Navigate into the cloned directory:**
+
 ```bash
 cd repository
 ```
 
-### You have successfully set up your V-Server and configured it for secure access and web hosting!
+### You have successfully set up your V-Server and configured it for secure access and web hosting
