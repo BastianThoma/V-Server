@@ -1,6 +1,5 @@
 # V-Server Setup Guide
 
-Server IP: `23.88.106.133`
 
 This guide will help you set up your V-Server from scratch, covering SSH configuration, password login disablement, and setting up an Nginx web server. Follow the steps below to configure your server.
 
@@ -22,92 +21,96 @@ This guide will help you set up your V-Server from scratch, covering SSH configu
 
 ## 1. **Generate SSH Key Pair**
 
-1. Create an `ed25519` SSH key pair using the command: 
+__1. Create an `ed25519` SSH key pair using the command:__
 ```bash
 ssh-keygen -t ed25519
 ```
-2. Save the keys in the .ssh directory (default location).
-3. Verify the keys are saved with the command: 
+__2. Save the keys in the .ssh directory (default location).__
+
+__3. Verify the keys are saved with the command:__
 ```bash
 ls ~/.ssh
 ```
 ## 2. **First Login to the Server**
 
-1. Connect to the server using username and Server-IP with the command: 
+__1. Connect to the server using username and Server-IP with the command:__ 
 ```bash
 ssh username@Server-IP
 ```
-2. When prompted, confirm the connection by typing yes.
-3. Enter your password to log in for the first time.
-4. Once logged in, server information should appear.
+__2. When prompted, confirm the connection by typing yes.__
+
+__3. Enter your password to log in for the first time.__
+
+__4. Once logged in, server information should appear.__
 
 ## 3. **Copy SSH Public Key to Server**
 
-1. Use Git Bash (or any terminal) on Windows to copy the SSH key: 
+__1. Use Git Bash (or any terminal) on Windows to copy the SSH key:__ 
 ```bash
 ssh-copy-id username@Server-IP
 ```
-2. Enter your password when prompted. This will add your public key to the server.
+__2. Enter your password when prompted. This will add your public key to the server.__
 
 ## 4. **Test SSH Key Authentication**
 
-1. Test logging in with your SSH key:
+__1. Test logging in with your SSH key:__
 ```bash
 ssh -i ~/.ssh/id_ed25519 username@Server-IP
 ```
-2. You should be able to log in without entering a password.
+__2. You should be able to log in without entering a password.__
 
 ## 5. **Disable Password Login**
 
-1. Edit the SSH configuration:
+__1. Edit the SSH configuration:__
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
-2. Find the line:
+__2. Find the line:__
 ```console
 #PasswordAuthentication yes
 ```
-3. Replace it with:
+__3. Replace it with:__
 ```console
 PasswordAuthentication no
 ```
-4. Save and close the editor (Ctrl+O, then Ctrl+X).
-5. Restart the SSH service:
+__4. Save and close the editor (Ctrl+O, then Ctrl+X).__
+
+__5. Restart the SSH service:__
 ```bash
 sudo systemctl restart ssh.service
 ```
-6. Verify password login is disabled:
+__6. Verify password login is disabled:__
 ```bash
 ssh -o PubkeyAuthentication=no username@Server-IP
 ```
 The result should be: `Permission denied (publickey).`
 ## 6. Install Nginx Web Server
 
-1. Update package lists 
+__1. Update package lists__ 
 ```bash
 sudo apt update
 ```
-2. Install Nginx 
+__2. Install Nginx__ 
 ```bash
 sudo apt install nginx -y
 ```
-3. Verify Nginx is running 
+__3. Verify Nginx is running__ 
 ```bash
 systemctl status nginx.service
 ```
-4. Open your Server’s IP in a Browser to check if the default Nginx page loads.
+__4. Open your Server’s IP in a Browser to check if the default Nginx page loads.__
 
 ## 7. **Configure an Alternative Nginx Site**
 
-1. Create a new directory for the site:
+__1. Create a new directory for the site:__
 ```bash
 sudo mkdir /var/www/alternatives
 ```
-2. Create an HTML file for the site:
+__2. Create an HTML file for the site:__
 ```bash
 sudo touch /var/www/alternatives/alternate-index.html
 ```
-3. Configure the site:
+__3. Configure the site:__
 ```bash
 sudo nano /etc/nginx/sites-enabled/alternatives
 ```
@@ -123,51 +126,52 @@ server {
     }
 }
 ```
-4. Save and close the file (Ctrl+O, then Ctrl+X).
+__4. Save and close the file (Ctrl+O, then Ctrl+X).__
 
-5. Edit the HTML file:
+__5. Edit the HTML file:__
 ```bash
 sudo nano /var/www/alternatives/alternate-index.html
 ```
 Customize the page as desired.
-6. Restart Nginx:
+
+__6. Restart Nginx:__
 ```bash
 sudo service nginx restart
 ```
-7. Verify the new site:
+__7. Verify the new site:__
 Open your server’s IP in the browser, appending :8081 to test the new configuration.
 
 ## 8. **Create an SSH Alias**
 
-1. Add an alias for easier login:
+__1. Add an alias for easier login:__
 ```bash
 alias vserver_connect="ssh -o StrictHostKeyChecking=False -i ~/.ssh/id_ed25519 username@Server-IP"
 ```
-2. Use the alias to log in:
+__2. Use the alias to log in:__
 ```bash
 vserver_connect
 ```
 ## 9. **Install and Configure Git**
 
-1. Install Git:
+__1. Install Git:__
 ```bash
 sudo apt update
 sudo apt install git -y
 ```
-2. Configure Git:
+__2. Configure Git:__
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
-3. Verify Git installation:
+__3. Verify Git installation:__
 ```bash
 git --version
 ```
-4. Test Git functionality by cloning a repository:
+__4. Test Git functionality by cloning a repository:__
 ```bash
 git clone https://github.com/example/repository.git
 ```
-5. Navigate into the cloned directory:
+__5. Navigate into the cloned directory:__
 ```bash
 cd repository
 ```
