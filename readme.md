@@ -83,7 +83,7 @@ __6. Verify password login is disabled:__
 ```bash
 ssh -o PubkeyAuthentication=no username@Server-IP
 ```
-The result should be: `Permission denied (publickey).`
+__The result should be:__ `Permission denied (publickey).`
 ## 6. Install Nginx Web Server
 
 __1. Update package lists__ 
@@ -132,14 +132,14 @@ __5. Edit the HTML file:__
 ```bash
 sudo nano /var/www/alternatives/alternate-index.html
 ```
-Customize the page as desired.
+__Customize the page as desired.__
 
 __6. Restart Nginx:__
 ```bash
 sudo service nginx restart
 ```
 __7. Verify the new site:__
-Open your server’s IP in the browser, appending :8081 to test the new configuration.
+__Open your server’s IP in the browser, appending :8081 to test the new configuration.__
 
 ## 8. **Create an SSH Alias**
 
